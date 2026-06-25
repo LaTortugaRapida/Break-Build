@@ -3,26 +3,22 @@
 #include <stdint.h>
 #include <time.h>
 
-#define TARGET_SIZE 4ULL * 1024 * 1024 * 1024
+#define TARGET_SIZE (4ULL * 1024 * 1024 * 1024)
 
 int main()
 {
     FILE *fp = fopen("numbers.txt", "w");
-    if (!fp) {
-        perror("File open failed!");
-        return 1;
-    }
+    if (!fp) return 1;
 
     srand((unsigned)time(NULL));
 
     uint64_t written = 0;
+    char buf[16];
 
     while (written < TARGET_SIZE)
     {
         uint32_t num = rand() % 121;
-
-        char buf[16];
-        int len = sprintf(buf, "%u\n", num);
+        int len = snprintf(buf, sizeof(buf), "%u\n", num);
 
         if (written + len > TARGET_SIZE)
             break;
